@@ -18,7 +18,7 @@ Takes written text and/or an image and produces a complete, structured creative 
 
 ## What it generates
 
-Given a concept or image, ArtDir produces:
+Given a concept or image, Frame AI produces:
 
 - **Colour palette** — 5–7 hex values with names and emotional roles  
 - **Lighting mood** — quality, direction, temperature, time of day  
@@ -52,8 +52,8 @@ Given a concept or image, ArtDir produces:
 ### 1. Clone and initialise submodule
 
 ```bash
-git clone <this-repo> artdir
-cd artdir
+git clone <this-repo> frame-ai
+cd frame-ai
 git submodule update --init --recursive
 ```
 
@@ -84,28 +84,28 @@ cd ..
 
 ```bash
 # Text only
-./build/artdir --text "A lighthouse keeper in winter, alone, fog so thick the sea disappears."
+./build/frame-ai --text "A lighthouse keeper in winter, alone, fog so thick the sea disappears."
 
 # Image only (requires vision model)
-./build/artdir --image photo.jpg
+./build/frame-ai --image photo.jpg
 
 # Text + image
-./build/artdir --text "This place used to be full of people" --image empty_carpark.jpg
+./build/frame-ai --text "This place used to be full of people" --image empty_carpark.jpg
 
 # Save to file
-./build/artdir --text "Baroque feast hall" --output brief.txt
+./build/frame-ai --text "Baroque feast hall" --output brief.txt
 
 # JSON format
-./build/artdir --text "Dystopian city at dawn" --format json
+./build/frame-ai --text "Dystopian city at dawn" --format json
 
 # Verbose (shows generation progress)
-./build/artdir --text "Antarctic silence" --verbose
+./build/frame-ai --text "Antarctic silence" --verbose
 ```
 
 ### Browser mode
 
 ```bash
-./build/artdir --serve
+./build/frame-ai --serve
 # Open http://localhost:8080 in your browser
 ```
 
@@ -130,7 +130,7 @@ cd ..
 ## Project structure
 
 ```
-artdir/
+frame-ai/
 ├── src/
 │   ├── main.cpp      — entry point, CLI + server modes
 │   ├── model.cpp     — llama.cpp loading and inference
