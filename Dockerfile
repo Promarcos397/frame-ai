@@ -13,9 +13,9 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
-# Download the Gemma 3 4B model (using Q4_K_M for speed/memory balance)
+# Download the Gemma 3 12B model (using Q4_K_M for speed/memory balance)
 RUN mkdir -p models && \
-    wget -q https://huggingface.co/google/gemma-3-4b-it-GGUF/resolve/main/gemma-3-4b-it-Q4_K_M.gguf -O models/gemma-3-4b-it.gguf
+    wget -q https://huggingface.co/unsloth/gemma-3-12b-it-GGUF/resolve/main/gemma-3-12b-it-Q4_K_M.gguf -O models/gemma-3-12b-it.gguf
 
 # Build the C++ server
 RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -25,4 +25,4 @@ RUN cmake --build build --config Release -j4
 EXPOSE 8080
 
 # Run the server bound to all interfaces
-CMD ["./build/frame-ai", "--serve", "--model", "models/gemma-3-4b-it.gguf", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["./build/frame-ai", "--serve", "--model", "models/gemma-3-12b-it.gguf", "--host", "0.0.0.0", "--port", "8080"]
