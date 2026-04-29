@@ -1,11 +1,5 @@
-# ArtDir — Cloudflare Pages config
-# Deploy the web/ directory as a static site.
-# No build step needed (plain HTML/CSS/JS).
+name = "frame-ai"
+compatibility_date = "2026-04-29"
 
-[build]
-  command = ""
-  publish = "web"
-
-[build.environment]
-  # Set this to point to your self-hosted artdir server
-  # ARTDIR_API_URL = "https://your-server.example.com"
+[assets]
+directory = "./web"
