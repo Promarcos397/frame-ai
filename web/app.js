@@ -420,3 +420,63 @@ function formatBriefPlaintext(data) {
 
 // ── Initial state ──────────────────────────────────────────────────────────────
 showState('empty');
+
+// ── Imagine (image generation) ────────────────────────────────────────────────
+const btnImagine  = document.getElementById('btn-imagine');
+const imageOutput = document.getElementById('image-output');
+const imageLoading= document.getElementById('image-loading');
+const generatedImg= document.getElementById('generated-img');
+const btnImgDl    = document.getElementById('btn-img-dl');
+
+btnImagine.addEventListener('click', generateImage);
+
+function buildImagePrompt(data) {
+  // Distil the brief into a rich visual prompt for Pollinations
+  const parts = [];
+  if (data.tone_atmosphere)   parts.push(data.tone_atmosphere.slice(0, 120));
+  if (data.lighting_mood)     parts.push(data.lighting_mood.slice(0, 80));
+  if (data.composition_style) parts.push(data.composition_style.slice(0, 80));
+  if (data.art_references)    parts.push(data.art_references.split('\n')[0].slice(0, 80));
+  // Append colour palette hex values as style hints
+  const hexes = (data.colour_palette || '').match(/#[0-9a-fA-F]{6}/g) || [];
+  if (hexes.length) parts.push('color palette: ' + hexes.slice(0,4).join(' '));
+  parts.push('cinematic, editorial photography, highly detailed, 4k');
+  return parts.join(', ');
+}
+
+async function generateImage() {
+  if (!currentBrief) return;
+
+  btnImagine.disabled = true;
+  btnImagine.textContent = '⏳ Rendering…';
+
+  imageOutput.classList.remove('hidden');
+  imageLoading.classList.remove('hidden');
+  generatedImg.classList.add('hidden');
+  btnImgDl.classList.add('hidden');
+
+  // Scroll to image section
+  imageOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  const prompt   = buildImagePrompt(currentBrief);
+  const encoded  = encodeURIComponent(prompt);
+  const seed     = Math.floor(Math.random() * 999999);
+  const imageUrl = `https://image.pollinations.ai/prompt/${encoded}?width=1280&height=720&seed=${seed}&nologo=true&model=flux`;
+
+  const img = new Image();
+  img.onload = () => {
+    imageLoading.classList.add('hidden');
+    generatedImg.src = imageUrl;
+    generatedImg.classList.remove('hidden');
+    btnImgDl.href = imageUrl;
+    btnImgDl.classList.remove('hidden');
+    btnImagine.disabled = false;
+    btnImagine.textContent = '★ Imagine';
+  };
+  img.onerror = () => {
+    imageLoading.innerHTML = '<p style="color:var(--clr-error,#e94560)">Image generation failed — try again</p>';
+    btnImagine.disabled = false;
+    btnImagine.textContent = '★ Imagine';
+  };
+  img.src = imageUrl;
+}

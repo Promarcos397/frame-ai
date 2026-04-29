@@ -127,6 +127,7 @@
         <div class="output-actions hidden" id="output-actions">
           <button class="btn-action" id="btn-copy" aria-label="Copy brief to clipboard">Copy</button>
           <button class="btn-action" id="btn-download" aria-label="Download brief as text file">Save</button>
+          <button class="btn-action btn-imagine" id="btn-imagine" aria-label="Generate image from brief">★ Imagine</button>
         </div>
       </div>
 
@@ -215,6 +216,23 @@
         </div>
 
       </div>
+
+      <!-- Generated Image -->
+      <div class="image-output hidden" id="image-output">
+        <div class="image-output-header">
+          <h3 class="brief-section-title"><span class="section-icon">★</span> Generated Visual</h3>
+          <span class="image-model-tag">via Pollinations AI</span>
+        </div>
+        <div class="image-wrap" id="image-wrap">
+          <div class="image-loading" id="image-loading">
+            <div class="img-spinner"></div>
+            <p>Rendering visual…</p>
+          </div>
+          <img class="generated-img hidden" id="generated-img" alt="AI generated visual from brief" />
+          <a class="btn-action btn-img-dl hidden" id="btn-img-dl" download="frame-ai-visual.jpg" target="_blank">⤓ Download Image</a>
+        </div>
+      </div>
+
     </section>
 
   </main>
