@@ -25,7 +25,7 @@ Options:
                           (default: models/gemma-3-4b-it-q4_k_m.gguf)
   --vision path/to/gguf   Path to vision model GGUF
                           (default: models/moondream2.gguf)
-  --serve                 Start browser UI server on localhost:8080
+  --serve                 Start browser UI server (default: 127.0.0.1:8080)
   --host   IP             Host IP for server mode (default: 127.0.0.1)
   --port   N              Port for server mode (default: 8080)
   --threads N             CPU threads to use (default: 4)

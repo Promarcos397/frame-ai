@@ -70,7 +70,7 @@ function setStatus(state, label) {
 
 async function checkHealth() {
   try {
-    const base = window.ARTDIR_API_URL || 'http://localhost:8080';
+    const base = window.ARTDIR_API_URL || 'https://ibrahimar397-frame-ai-backend.hf.space';
     const res = await fetch(`${base}/health`, { method: 'GET' });
     if (res.ok) {
       setStatus('online', 'Model ready');
