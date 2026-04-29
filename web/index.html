@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frame AI — Visual Art Direction Generator</title>
+  <meta name="description" content="Generate professional visual art direction briefs from text concepts or images. Powered by Frame AI, runs entirely offline." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Optional: set window.ARTDIR_API_URL for deployed environments -->
+  <script src="/config.js" onerror="void 0"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="logo-mark">◈</span>
+        <span class="logo-text">Frame AI</span>
+      </div>
+      <div class="nav-status" id="nav-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span class="status-label" id="status-label">Connecting…</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Gemma 3 · Local · Offline</p>
+      <h1 class="hero-title">
+        Visual Art<br />
+        <em>Direction</em><br />
+        Instantly.
+      </h1>
+      <p class="hero-subtitle">
+        Describe a concept or drop an image.<br />
+        Receive a professional creative brief in seconds.
+      </p>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>↓</span>
+    </div>
+  </header>
+
+  <!-- ── Main App ───────────────────────────────────────────────────────── -->
+  <main class="app" id="app">
+
+    <!-- Input Panel -->
+    <section class="panel panel-input" id="panel-input">
+      <div class="panel-header">
+        <h2 class="panel-title">Input</h2>
+        <span class="panel-tag">01</span>
+      </div>
+
+      <!-- Text input -->
+      <div class="field-group" id="field-text">
+        <label class="field-label" for="input-text">Concept or description</label>
+        <textarea
+          id="input-text"
+          class="field-textarea"
+          placeholder="A scientist alone in an Antarctic research station during a months-long blizzard. She has not spoken to another human in six weeks."
+          rows="5"
+          spellcheck="false"
+        ></textarea>
+        <div class="char-counter"><span id="char-count">0</span> characters</div>
+      </div>
+
+      <!-- Image drop zone -->
+      <div class="field-group" id="field-image">
+        <label class="field-label">Image input <span class="label-optional">(optional — requires vision model)</span></label>
+        <div
+          class="drop-zone"
+          id="drop-zone"
+          tabindex="0"
+          role="button"
+          aria-label="Upload image"
+        >
+          <div class="drop-zone-inner" id="drop-zone-inner">
+            <div class="drop-icon">⬆</div>
+            <p class="drop-text">Drop an image here, or <span class="drop-link">click to browse</span></p>
+            <p class="drop-hint">JPG · PNG · BMP</p>
+          </div>
+          <div class="drop-preview hidden" id="drop-preview">
+            <img class="preview-img" id="preview-img" src="" alt="Uploaded image preview" />
+            <button class="preview-remove" id="preview-remove" aria-label="Remove image">✕</button>
+            <p class="preview-name" id="preview-name"></p>
+          </div>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/bmp" class="hidden-input" />
+        </div>
+      </div>
+
+      <!-- Example prompts -->
+      <div class="examples">
+        <p class="examples-label">Try an example:</p>
+        <div class="examples-list">
+          <button class="example-chip" data-text="A lighthouse keeper in winter, alone, fog so thick the sea disappears.">Lighthouse keeper</button>
+          <button class="example-chip" data-text="Baroque feast hall filled with rotting food, candles melting, everyone long gone.">Baroque decay</button>
+          <button class="example-chip" data-text="Dystopian city at dawn. Neon reflections in rain-slick streets. No people.">Dystopian dawn</button>
+          <button class="example-chip" data-text="A child's bedroom abandoned for decades. Sunlight through dusty curtains.">Abandoned room</button>
+          <button class="example-chip" data-text="An underground jazz club in 1950s New York. Smoke, sweat, and genius.">Jazz club</button>
+        </div>
+      </div>
+
+      <!-- Generate button -->
+      <button class="btn-generate" id="btn-generate">
+        <span class="btn-text" id="btn-text">Generate Brief</span>
+        <span class="btn-arrow">→</span>
+      </button>
+
+      <!-- Error message -->
+      <div class="error-message hidden" id="error-message" role="alert">
+        <span class="error-icon">!</span>
+        <span class="error-text" id="error-text"></span>
+      </div>
+    </section>
+
+    <!-- Output Panel -->
+    <section class="panel panel-output" id="panel-output">
+      <div class="panel-header">
+        <h2 class="panel-title">Brief</h2>
+        <span class="panel-tag">02</span>
+        <div class="output-actions hidden" id="output-actions">
+          <button class="btn-action" id="btn-copy" aria-label="Copy brief to clipboard">Copy</button>
+          <button class="btn-action" id="btn-download" aria-label="Download brief as text file">Save</button>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="output-empty" id="output-empty">
+        <div class="empty-illustration">
+          <div class="empty-swatch" style="--hue:220;"></div>
+          <div class="empty-swatch" style="--hue:350;"></div>
+          <div class="empty-swatch" style="--hue:45;"></div>
+          <div class="empty-swatch" style="--hue:160;"></div>
+          <div class="empty-swatch" style="--hue:280;"></div>
+        </div>
+        <p class="empty-text">Your brief will appear here</p>
+        <p class="empty-subtext">Enter a concept and press Generate</p>
+      </div>
+
+      <!-- Loading state -->
+      <div class="output-loading hidden" id="output-loading">
+        <div class="loading-animation">
+          <div class="loading-bar" id="lb1"></div>
+          <div class="loading-bar" id="lb2"></div>
+          <div class="loading-bar" id="lb3"></div>
+          <div class="loading-bar" id="lb4"></div>
+          <div class="loading-bar" id="lb5"></div>
+        </div>
+        <p class="loading-text">Generating visual direction…</p>
+        <p class="loading-subtext" id="loading-subtext">Model is thinking</p>
+      </div>
+
+      <!-- Brief output -->
+      <div class="output-brief hidden" id="output-brief">
+
+        <!-- Colour palette swatches -->
+        <div class="brief-section brief-palette" id="brief-palette">
+          <h3 class="brief-section-title">Colour Palette</h3>
+          <div class="palette-grid" id="palette-grid"></div>
+          <div class="palette-raw" id="palette-raw"></div>
+        </div>
+
+        <!-- Lighting -->
+        <div class="brief-section" id="brief-lighting">
+          <h3 class="brief-section-title">
+            <span class="section-icon">◐</span> Lighting Mood
+          </h3>
+          <p class="brief-text" id="lighting-text"></p>
+        </div>
+
+        <!-- Composition -->
+        <div class="brief-section" id="brief-composition">
+          <h3 class="brief-section-title">
+            <span class="section-icon">⊞</span> Composition Style
+          </h3>
+          <p class="brief-text" id="composition-text"></p>
+        </div>
+
+        <!-- Art references -->
+        <div class="brief-section" id="brief-references">
+          <h3 class="brief-section-title">
+            <span class="section-icon">◉</span> Art Movement References
+          </h3>
+          <div class="references-list" id="references-list"></div>
+        </div>
+
+        <!-- Texture -->
+        <div class="brief-section" id="brief-texture">
+          <h3 class="brief-section-title">
+            <span class="section-icon">▦</span> Texture & Material
+          </h3>
+          <p class="brief-text" id="texture-text"></p>
+        </div>
+
+        <!-- Tone -->
+        <div class="brief-section brief-tone" id="brief-tone">
+          <h3 class="brief-section-title">
+            <span class="section-icon">✦</span> Tone & Atmosphere
+          </h3>
+          <blockquote class="brief-quote" id="tone-text"></blockquote>
+        </div>
+
+        <!-- What to avoid -->
+        <div class="brief-section brief-avoid" id="brief-avoid">
+          <h3 class="brief-section-title">
+            <span class="section-icon">✕</span> What to Avoid
+          </h3>
+          <div class="avoid-list" id="avoid-list"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <p>Frame AI runs entirely offline · Powered by <strong>Gemma 3 4B</strong> via llama.cpp · No data leaves your machine</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
