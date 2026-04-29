@@ -26,6 +26,7 @@ Options:
   --vision path/to/gguf   Path to vision model GGUF
                           (default: models/moondream2.gguf)
   --serve                 Start browser UI server on localhost:8080
+  --host   IP             Host IP for server mode (default: 127.0.0.1)
   --port   N              Port for server mode (default: 8080)
   --threads N             CPU threads to use (default: 4)
   --verbose               Show token generation progress
@@ -57,6 +58,7 @@ int main(int argc, char* argv[]) {
     std::string vision_model = "models/moondream2.gguf";
     bool serve_mode = false;
     bool verbose    = false;
+    std::string host = "127.0.0.1";
     int  port       = 8080;
     int  threads    = 4;
 
@@ -69,6 +71,7 @@ int main(int argc, char* argv[]) {
         else if (arg == "--format"  && i+1 < argc) format       = argv[++i];
         else if (arg == "--model"   && i+1 < argc) text_model   = argv[++i];
         else if (arg == "--vision"  && i+1 < argc) vision_model = argv[++i];
+        else if (arg == "--host"    && i+1 < argc) host         = argv[++i];
         else if (arg == "--port"    && i+1 < argc) port         = std::stoi(argv[++i]);
         else if (arg == "--threads" && i+1 < argc) threads      = std::stoi(argv[++i]);
         else if (arg == "--serve")    serve_mode = true;
@@ -84,6 +87,7 @@ int main(int argc, char* argv[]) {
     // ── Server mode ───────────────────────────────────────────────────────────
     if (serve_mode) {
         ServerConfig sc;
+        sc.host         = host;
         sc.port         = port;
         sc.text_model   = text_model;
         sc.vision_model = vision_model;

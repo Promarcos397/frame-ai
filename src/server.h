@@ -9,6 +9,7 @@ struct GenerateRequest {
 };
 
 struct ServerConfig {
+    std::string host        = "127.0.0.1";
     int         port        = 8080;
     std::string web_root    = "web/";
     std::string models_dir  = "models/";

@@ -64,8 +64,8 @@ void run_server(const ServerConfig& config) {
     std::mutex model_mutex;   // llama.cpp contexts are not thread-safe
 
     std::cout << "[artdir] Model ready.\n";
-    std::cout << "[artdir] Server running at http://localhost:" << config.port << "\n";
-    std::cout << "[artdir] Open your browser and go to http://localhost:" << config.port << "\n";
+    std::cout << "[artdir] Server running at http://" << config.host << ":" << config.port << "\n";
+    std::cout << "[artdir] Open your browser and go to http://" << config.host << ":" << config.port << "\n";
 
     httplib::Server svr;
 
@@ -138,5 +138,5 @@ void run_server(const ServerConfig& config) {
         res.set_content("{\"status\":\"ok\"}", "application/json");
     });
 
-    svr.listen("127.0.0.1", config.port);
+    svr.listen(config.host.c_str(), config.port);
 }
