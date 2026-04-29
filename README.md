@@ -1,6 +1,16 @@
-# ArtDir — Visual Art Direction Generator
+---
+title: Frame AI
+emoji: 🖼️
+colorFrom: gray
+colorTo: blue
+sdk: docker
+app_port: 8080
+pinned: false
+---
 
-A locally-running visual art direction tool powered by **Gemma 3 4B** via **llama.cpp**.
+# Frame AI — Visual Art Direction Generator
+
+A locally-running visual art direction tool powered by **Gemma 3** via **llama.cpp**.
 
 Takes written text and/or an image and produces a complete, structured creative brief. Runs entirely offline. No Python. No cloud API calls.
 
