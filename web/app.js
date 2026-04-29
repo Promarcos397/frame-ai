@@ -6,7 +6,7 @@
 // In local mode: points to the frame-ai --serve process.
 // In deployed mode: set window.ARTDIR_API_URL in /public/_config.js
 // (injected by a Cloudflare Pages Function or static config file).
-const API_URL = (window.ARTDIR_API_URL || 'http://localhost:8080') + '/generate';
+const API_URL = (window.ARTDIR_API_URL || 'https://ibrahimar397-frame-ai-backend.hf.space') + '/generate';
 
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const nav           = document.getElementById('nav');
