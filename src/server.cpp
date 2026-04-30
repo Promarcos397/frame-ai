@@ -63,9 +63,9 @@ void run_server(const ServerConfig& config) {
     auto model = std::make_unique<Model>(mc);
     std::mutex model_mutex;   // llama.cpp contexts are not thread-safe
 
-    std::cout << "[artdir] Model ready.\n";
-    std::cout << "[artdir] Server running at http://" << config.host << ":" << config.port << "\n";
-    std::cout << "[artdir] Open your browser and go to http://" << config.host << ":" << config.port << "\n";
+    std::cout << "[artdir] Model ready." << std::endl;
+    std::cout << "[artdir] Server running at http://" << config.host << ":" << config.port << std::endl;
+    std::cout << "[artdir] Open your browser and go to http://" << config.host << ":" << config.port << std::endl;
 
     httplib::Server svr;
 

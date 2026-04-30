@@ -25,4 +25,4 @@ RUN cmake --build build --config Release -j4
 EXPOSE 8080
 
 # Run the server bound to all interfaces
-CMD ["./build/frame-ai", "--serve", "--model", "models/gemma-3-12b-it.gguf", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["./build/frame-ai", "--serve", "--model", "models/gemma-3-12b-it.gguf", "--host", "0.0.0.0", "--port", "8080", "--verbose"]
